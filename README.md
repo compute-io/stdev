@@ -19,14 +19,20 @@ For use in the browser, use [browserify](https://github.com/substack/node-browse
 To use the module,
 
 ``` javascript
-var lib = require( 'compute-stdev' );
+var stdev = require( 'compute-stdev' );
 ```
 
 
 ## Examples
 
 ``` javascript
-var lib = require( 'compute-stdev' );
+var data = new Array( 1000 );
+
+for ( var i = 0; i < data.length; i++ ) {
+	data[ i ] = Math.random()*100;
+}
+
+console.log( stdev( data ) );
 ```
 
 To run the example code from the top-level application directory,
