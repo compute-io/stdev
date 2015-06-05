@@ -31,35 +31,28 @@ var stdev = require( 'compute-stdev' );
 
 ### stdev( x[, opts] )
 
-Computes the [variance](http://en.wikipedia.org/wiki/Variance). `x` may be either an [`array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays), or [`matrix`](https://github.com/dstructs/matrix).
+Computes the [standard deviation](http://en.wikipedia.org/wiki/Standard_deviation). `x` may be either an [`array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays), or [`matrix`](https://github.com/dstructs/matrix).
 
 For numeric `arrays`,
 
 ``` javascript
-var data = [ 2, 4, 5, 3, 4, 3, 1, 5, 6, 9 ];
+var data = [ 1, 4, 7 ];
 
 var s = stdev( data );
-// returns 5.067
+// returns 3
 
 data = new Int8Array( data );
 s = stdev( data );
-// returns 5.067
+// returns 3
 ```
 
 For non-numeric `arrays`, provide an accessor `function` for accessing numeric `array` values
 
 ``` javascript
 var data = [
-    {'x':2},
-    {'x':4},
-    {'x':5},
-    {'x':3},
-    {'x':4},
-    {'x':3},
     {'x':1},
-    {'x':5},
-    {'x':6},
-    {'x':9}
+    {'x':4},
+    {'x':7}
 ];
 
 function getValue( d ) {
@@ -69,18 +62,18 @@ function getValue( d ) {
 var s = stdev( data, {
 	'accessor': getValue
 });
-// returns 5.067
+// returns 2
 ```
 
 By default, the function calculates the *unbiased* sample [standard deviation](http://en.wikipedia.org/wiki/Standard_deviation). To calculate the population standard deviation (or a *biased* sample standard deviation), set the `bias` option to `true`.
 
 ``` javascript
-var data = [ 2, 4, 5, 3, 4, 3, 1, 5, 6, 9 ];
+var data = [ 1, 4, 7 ];
 
 var value = stdev( data, {
 	'bias': true
 });
-// returns 4.56
+// returns 3.674235
 ```
 
 The biased [standard deviation](http://en.wikipedia.org/wiki/Standard_deviation) is calculated as follows:
@@ -119,11 +112,11 @@ mat = matrix( data, [5,5], 'int8' );
 
 s = stdev( mat );
 /*
-	[  2.5
-	   2.5
-	   2.5
-	   2.5
-	   2.5 ]
+	[  1.581139
+	   1.581139
+	   1.581139
+	   1.581139
+	   1.581139 ]
 */
 ```
 
@@ -134,7 +127,7 @@ s = stdev( mat, {
 	'dim': 1
 });
 /*
-	[ 62.5, 62.5, 62.5, 62.5, 62.5 ]
+	[ 7.905694, 7.905694, 7.905694, 7.905694, 7.905694 ]
 */
 ```
 
@@ -146,7 +139,7 @@ s = stdev( mat, {
 	'dtype': 'uint8'
 });
 /*
-	[ 10, 11, 12, 13, 14 ]
+	[ 7, 7, 7, 7, 7 ]
 */
 
 var dtype = s.dtype;
@@ -156,17 +149,17 @@ var dtype = s.dtype;
 If provided a [`matrix`](https://github.com/dstructs/matrix) having either dimension equal to `1`, the function treats the [`matrix`](https://github.com/dstructs/matrix) as a [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays) and returns a `numeric` value.
 
 ``` javascript
-data = [ 2, 4, 5, 3, 4, 3, 1, 5, 6, 9  ];
+data = [ 1, 4, 7 ];
 
 // Row vector:
-mat = matrix( new Int8Array( data ), [1,10], 'int8' );
+mat = matrix( new Int8Array( data ), [1,3], 'int8' );
 s = stdev( mat );
-// returns 5.067
+// returns 2
 
 // Column vector:
-mat = matrix( new Int8Array( data ), [10,1], 'int8' );
+mat = matrix( new Int8Array( data ), [3,1], 'int8' );
 s = stdev( mat );
-// returns 5.067
+// returns 2
 ```
 
 If provided an empty [`array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays), or [`matrix`](https://github.com/dstructs/matrix), the function returns `null`.
@@ -191,8 +184,6 @@ s = stdev( matrix( [10,0] ) );
 ## Examples
 
 ``` javascript
-'use strict';
-
 var matrix = require( 'dstructs-matrix' ),
 	stdev = require( './../lib' );
 
@@ -273,7 +264,7 @@ $ node ./examples/index.js
 
 ### Unit
 
-Unit tests use the [Mocha](http://visionmedia.github.io/mocha) test framework with [Chai](http://chaijs.com) assertions. To run the tests, execute the following command in the top-level application directory:
+Unit tests use the [Mocha](http://mochajs.org) test framework with [Chai](http://chaijs.com) assertions. To run the tests, execute the following command in the top-level application directory:
 
 ``` bash
 $ make test
@@ -297,16 +288,15 @@ $ open reports/coverage/lcov-report/index.html
 ```
 
 
+---
 ## License
 
 [MIT license](http://opensource.org/licenses/MIT).
 
 
----
 ## Copyright
 
-Copyright &copy; 2014. Athan Reines.
-
+Copyright &copy; 2014-2015. The Compute.io Authors.
 
 [npm-image]: http://img.shields.io/npm/v/compute-stdev.svg
 [npm-url]: https://npmjs.org/package/compute-stdev
