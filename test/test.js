@@ -1,5 +1,9 @@
+/* global describe, it, require */
+'use strict';
 
 // MODULES //
+
+var matrix = require( 'dstructs-matrix' );
 
 var // Expectation library:
 	chai = require( 'chai' ),
@@ -17,23 +21,22 @@ var expect = chai.expect,
 // TESTS //
 
 describe( 'compute-stdev', function tests() {
-	'use strict';
 
 	it( 'should export a function', function test() {
 		expect( stdev ).to.be.a( 'function' );
 	});
 
-	it( 'should throw an error if provided a non-array', function test() {
+	it( 'should throw an error if the first argument is neither array-like or matrix-like', function test() {
 		var values = [
-				'5',
-				5,
-				true,
-				undefined,
-				null,
-				NaN,
-				function(){},
-				{}
-			];
+		//	'5', // valid as is array-like (length)
+			5,
+			true,
+			undefined,
+			null,
+			NaN,
+			function(){},
+			{}
+		];
 
 		for ( var i = 0; i < values.length; i++ ) {
 			expect( badValue( values[i] ) ).to.throw( TypeError );
@@ -45,20 +48,160 @@ describe( 'compute-stdev', function tests() {
 		}
 	});
 
+	it( 'should throw an error if provided an unrecognized/unsupported data type option', function test() {
+		var values = [
+			'beep',
+			'boop'
+		];
+
+		for ( var i = 0; i < values.length; i++ ) {
+			expect( badValue( values[i] ) ).to.throw( Error );
+		}
+		function badValue( value ) {
+			return function() {
+				stdev( matrix( [2,2] ), {
+					'dtype': value
+				});
+			};
+		}
+	});
+
+	it( 'should throw an error if provided a dim option which is not a positive integer', function test() {
+		var data = matrix( new Int32Array([1,2,3,4]), [2,2] );
+		var values = [
+			'5',
+			-5,
+			2.2,
+			true,
+			undefined,
+			null,
+			NaN,
+			[],
+			{}
+		];
+
+		for ( var i = 0; i < values.length; i++ ) {
+			expect( badValue( values[ i ] ) ).to.throw( Error );
+		}
+
+		function badValue( value ) {
+			return function() {
+				stdev( data, {'dim': value} );
+			};
+		}
+	});
+
+	it( 'should throw an error if provided a dim option which exceeds matrix dimensions ( = 2 )', function test() {
+		var data = matrix( new Int32Array([1,2,3,4]), [2,2] );
+		var values = [
+			3,
+			4,
+			5
+		];
+
+		for ( var i = 0; i < values.length; i++ ) {
+			expect( badValue( values[ i ] ) ).to.throw( RangeError );
+		}
+
+		function badValue( value ) {
+			return function() {
+				stdev( data, {'dim': value} );
+			};
+		}
+	});
+
 	it( 'should compute the sample standard deviation', function test() {
 		var data, expected;
 
 		data = [ 2, 4, 5, 3, 8, 2 ];
-		expected = Math.sqrt( 5.2 );
+		expected = 2.280350850198276;
 
 		assert.strictEqual( stdev( data ), expected );
 	});
 
-	it( 'should return 0 for a single element array', function test() {
+	it( 'should compute the sample standard deviation of a typed array', function test() {
 		var data, expected;
 
-		data = [ 2 ];
-		expected = 0;
+		data = new Int8Array( [ 2, 4, 5, 3, 8, 2 ] );
+		expected = 2.280350850198276;
+
+		assert.strictEqual( stdev( data ), expected );
+	});
+
+	it( 'should compute the (biased) sample standard deviation', function test() {
+		var data, expected, actual;
+
+		data = [ 2, 4, 5, 3, 8, 2 ];
+		expected = 2.0816659994661326;
+
+		actual =  stdev( data, {
+			'bias': true
+		});
+
+		assert.strictEqual( actual, expected );
+	});
+
+	it( 'should compute the sample standard deviation using an accessor function', function test() {
+		var data, expected, actual;
+
+		data = [
+			{'x':2},
+			{'x':4},
+			{'x':5},
+			{'x':3},
+			{'x':8},
+			{'x':2}
+		];
+		expected = 2.280350850198276;
+		actual = stdev( data, {
+			'accessor': getValue
+		});
+
+		function getValue( d ) {
+			return d.x;
+		}
+
+		assert.strictEqual( actual, expected );
+	});
+
+	it( 'should return `null` when provided an empty array', function test() {
+		var data, expected;
+
+		data = [];
+		expected = null;
+
+		assert.strictEqual( stdev( data ), expected );
+	});
+
+	it( 'should calculate the column standard deviations of a matrix', function test() {
+		var data, expected, results;
+
+		data = matrix( new Int32Array( [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ] ), [3,3] );
+		expected = matrix( new Float32Array( [ 1, 1, 1 ] ), [3,1] );
+
+		results = stdev( data, {'dtype': 'float32'} );
+
+		assert.strictEqual( results.data.length, expected.data.length );
+		assert.deepEqual( results.data, expected.data );
+	});
+
+	it( 'should calculate the row standard deviations of a matrix', function test() {
+		var data, expected, results;
+
+		data = matrix( new Int32Array( [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ] ), [3,3] );
+		expected = matrix( new Float32Array( [ 3, 3, 3 ] ), [1, 3] );
+
+		results = stdev( data, {'dim': 1, 'dtype': 'float32'} );
+
+		assert.strictEqual( results.data.length, expected.data.length );
+		assert.deepEqual( results.data, expected.data );
+	});
+
+	it( 'should compute the standard deviation for a vector (matrix with one column or row)', function test() {
+		var data, expected;
+
+		expected = 2.280350850198276;
+		data = matrix( new Int32Array( [ 2, 4, 5, 3, 8, 2 ] ), [6,1] );
 
 		assert.strictEqual( stdev( data ), expected );
 	});

@@ -185,7 +185,7 @@ s = stdev( matrix( [10,0] ) );
 
 ``` javascript
 var matrix = require( 'dstructs-matrix' ),
-	stdev = require( './../lib' );
+	stdev = require( 'compute-stdev' );
 
 var data,
 	mat,
