@@ -1,7 +1,7 @@
 {
   "name": "compute-stdev",
   "version": "0.0.0",
-  "description": "Computes the sample standard deviation over an array of values.",
+  "description": "Computes the sample standard deviation over an array or matrix.",
   "author": {
     "name": "Athan Reines",
     "email": "kgryte@gmail.com"
@@ -10,6 +10,10 @@
     {
       "name": "Athan Reines",
       "email": "kgryte@gmail.com"
+    },
+    {
+      "name": "Philipp Burckhardt",
+      "email": "pburckhardt@outlook.com"
     }
   ],
   "scripts": {
@@ -35,17 +39,25 @@
   "bugs": {
     "url": "https://github.com/compute-io/stdev/issues"
   },
-  "dependencies": {},
-  "devDependencies": {
-    "chai": "1.x.x",
-    "mocha": "1.x.x",
-    "coveralls": "^2.11.1",
-    "istanbul": "^0.3.0"
+  "dependencies": {
+	"compute-array-constructors": "^1.0.0",
+    "compute-dtype": "^1.0.0",
+    "dstructs-matrix": "^1.0.0",
+    "validate.io-array-like": "^1.0.0",
+    "validate.io-boolean-primitive": "^1.0.0",
+    "validate.io-function": "^1.0.2",
+    "validate.io-matrix-like": "^1.0.0",
+    "validate.io-object": "^1.0.4",
+    "validate.io-positive-integer": "^1.0.0",
+    "validate.io-string-primitive": "^1.0.0"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://www.opensource.org/licenses/MIT"
-    }
-  ]
+  "devDependencies": {
+    "chai": "2.x.x",
+    "mocha": "2.x.x",
+    "coveralls": "^2.11.1",
+    "istanbul": "^0.3.0",
+	"jshint": "2.x.x",
+    "jshint-stylish": "^1.0.0"
+  },
+  "license": "MIT"
 }
