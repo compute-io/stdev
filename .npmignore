@@ -13,6 +13,7 @@ examples/
 reports/
 support/
 test/
+benchmark/
 
 # Node.js #
 ###########
@@ -46,4 +47,6 @@ Desktop.ini
 # Utilities #
 #############
 .jshintrc
+.jshintignore
 .travis.yml
+.editorconfig

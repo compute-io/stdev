@@ -5,30 +5,40 @@
 # Set the node.js environment to test:
 NODE_ENV ?= test
 
+# Kernel name:
+KERNEL ?= $(shell uname -s)
+
+ifeq ($(KERNEL), Darwin)
+	OPEN ?= open
+else
+	OPEN ?= xdg-open
+endif
 
 # NOTES #
 
-NOTES ?= 'TODO|FIXME'
+NOTES ?= 'TODO|FIXME|WARNING|HACK|NOTE'
 
 
 # MOCHA #
 
-# Specify the test framework bin locations:
 MOCHA ?= ./node_modules/.bin/mocha
 _MOCHA ?= ./node_modules/.bin/_mocha
-
-# Specify the mocha reporter:
 MOCHA_REPORTER ?= spec
 
 
 # ISTANBUL #
 
-# Istanbul configuration:
 ISTANBUL ?= ./node_modules/.bin/istanbul
 ISTANBUL_OUT ?= ./reports/coverage
 ISTANBUL_REPORT ?= lcov
 ISTANBUL_LCOV_INFO_PATH ?= $(ISTANBUL_OUT)/lcov.info
 ISTANBUL_HTML_REPORT_PATH ?= $(ISTANBUL_OUT)/lcov-report/index.html
+
+
+# JSHINT #
+
+JSHINT ?= ./node_modules/.bin/jshint
+JSHINT_REPORTER ?= ./node_modules/jshint-stylish/stylish.js
 
 
 
@@ -81,7 +91,8 @@ test-istanbul-mocha: node_modules
 	NODE_ENV=$(NODE_ENV) \
 	NODE_PATH=$(NODE_PATH_TEST) \
 	$(ISTANBUL) cover \
-	--dir $(ISTANBUL_OUT) --report $(ISTANBUL_REPORT) \
+		--dir $(ISTANBUL_OUT) \
+		--report $(ISTANBUL_REPORT) \
 	$(_MOCHA) -- \
 		--reporter $(MOCHA_REPORTER) \
 		$(TESTS)
@@ -95,8 +106,19 @@ test-istanbul-mocha: node_modules
 view-cov: view-istanbul-report
 
 view-istanbul-report:
-	open $(ISTANBUL_HTML_REPORT_PATH)
+	$(OPEN) $(ISTANBUL_HTML_REPORT_PATH)
 
+
+# LINT #
+
+.PHONY: lint lint-jshint
+
+lint: lint-jshint
+
+lint-jshint: node_modules
+	$(JSHINT) \
+		--reporter $(JSHINT_REPORTER) \
+		./
 
 
 # NODE #
@@ -116,7 +138,6 @@ clean-node:
 
 
 # CLEAN #
-
 .PHONY: clean
 
 clean:
