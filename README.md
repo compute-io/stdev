@@ -4,7 +4,14 @@ stdev
 
 > Computes the sample [standard deviation](http://en.wikipedia.org/wiki/Standard_deviation).
 
-The unbiased [standard deviation](http://en.wikipedia.org/wiki/Standard_deviation) is defined by
+The biased [standard deviation](http://en.wikipedia.org/wiki/Standard_deviation) is defined as
+
+<div class="equation" align="center" data-raw-text="s = \sqrt{\frac{1}{N} \sum_{i=0}^{N-1} \left(x_i - \overline{x} \right)^2}" data-equation="eq:biased_stdev">
+	<img src="https://cdn.rawgit.com/compute-io/stdev/7681b6761ebc97576a11d4daaadb2857998a51f8/docs/img/eqn2.svg" alt="Equation for the biased sample standard deviation.">
+	<br>
+</div>
+
+and the unbiased [standard deviation](http://en.wikipedia.org/wiki/Standard_deviation) is defined as
 
 <div class="equation" align="center" data-raw-text="s =\sqrt{\frac{1}{N-1} \sum_{i=0}^{N-1} \left(x_i - \overline{x} \right)^2}" data-equation="eq:stdev">
 	<img src="https://cdn.rawgit.com/compute-io/stdev/7681b6761ebc97576a11d4daaadb2857998a51f8/docs/img/eqn1.svg" alt="Equation for the sample standard deviation.">
@@ -73,15 +80,8 @@ var data = [ 1, 4, 7 ];
 var value = stdev( data, {
 	'bias': true
 });
-// returns 3.674235
+// returns 1.3333
 ```
-
-The biased [standard deviation](http://en.wikipedia.org/wiki/Standard_deviation) is calculated as follows:
-
-<div class="equation" align="center" data-raw-text="s = \sqrt{\frac{1}{N} \sum_{i=0}^{N-1} \left(x_i - \overline{x} \right)^2}" data-equation="eq:biased_stdev">
-	<img src="https://cdn.rawgit.com/compute-io/stdev/7681b6761ebc97576a11d4daaadb2857998a51f8/docs/img/eqn2.svg" alt="Equation for the biased sample standard deviation.">
-	<br>
-</div>
 
 If provided a [`matrix`](https://github.com/dstructs/matrix), the function accepts the following additional `options`:
 
@@ -296,7 +296,7 @@ $ open reports/coverage/lcov-report/index.html
 
 ## Copyright
 
-Copyright &copy; 2014-2015. The Compute.io Authors.
+Copyright &copy; 2014-2015. The [Compute.io](https://github.com/compute-io) Authors.
 
 [npm-image]: http://img.shields.io/npm/v/compute-stdev.svg
 [npm-url]: https://npmjs.org/package/compute-stdev

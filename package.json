@@ -1,7 +1,7 @@
 {
   "name": "compute-stdev",
   "version": "0.0.0",
-  "description": "Computes the sample standard deviation over an array or matrix.",
+  "description": "Computes the sample standard deviation.",
   "author": {
     "name": "Athan Reines",
     "email": "kgryte@gmail.com"
@@ -40,8 +40,7 @@
     "url": "https://github.com/compute-io/stdev/issues"
   },
   "dependencies": {
-	"compute-array-constructors": "^1.0.0",
-    "compute-dtype": "^1.0.0",
+    "compute-array-constructors": "^1.0.0",
     "dstructs-matrix": "^1.0.0",
     "validate.io-array-like": "^1.0.0",
     "validate.io-boolean-primitive": "^1.0.0",

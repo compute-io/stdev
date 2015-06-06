@@ -3,10 +3,11 @@
 
 // MODULES //
 
-var matrix = require( 'dstructs-matrix' );
-
 var // Expectation library:
 	chai = require( 'chai' ),
+
+	// matrix data structure
+	matrix = require( 'dstructs-matrix' ),
 
 	// Module to be tested:
 	stdev = require( './../lib' );
@@ -28,7 +29,7 @@ describe( 'compute-stdev', function tests() {
 
 	it( 'should throw an error if the first argument is neither array-like or matrix-like', function test() {
 		var values = [
-		//	'5', // valid as is array-like (length)
+			//'5', // valid as is array-like (length)
 			5,
 			true,
 			undefined,
@@ -86,7 +87,9 @@ describe( 'compute-stdev', function tests() {
 
 		function badValue( value ) {
 			return function() {
-				stdev( data, {'dim': value} );
+				stdev( data, {
+					'dim': value
+				});
 			};
 		}
 	});
@@ -105,7 +108,9 @@ describe( 'compute-stdev', function tests() {
 
 		function badValue( value ) {
 			return function() {
-				stdev( data, {'dim': value} );
+				stdev( data, {
+					'dim': value
+				});
 			};
 		}
 	});
@@ -174,27 +179,29 @@ describe( 'compute-stdev', function tests() {
 	});
 
 	it( 'should calculate the column standard deviations of a matrix', function test() {
-		var data, expected, results;
+		var data, expected, s;
 
 		data = matrix( new Int32Array( [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ] ), [3,3] );
-		expected = matrix( new Float32Array( [ 1, 1, 1 ] ), [3,1] );
+		expected = matrix( new Float64Array( [ 1, 1, 1 ] ), [3,1] );
 
-		results = stdev( data, {'dtype': 'float32'} );
+		s = stdev( data, {
+			'dim': 2
+		});
 
-		assert.strictEqual( results.data.length, expected.data.length );
-		assert.deepEqual( results.data, expected.data );
+		assert.deepEqual( s.data, expected.data );
 	});
 
 	it( 'should calculate the row standard deviations of a matrix', function test() {
-		var data, expected, results;
+		var data, expected, s;
 
 		data = matrix( new Int32Array( [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ] ), [3,3] );
-		expected = matrix( new Float32Array( [ 3, 3, 3 ] ), [1, 3] );
+		expected = matrix( new Float64Array( [ 3, 3, 3 ] ), [1, 3] );
 
-		results = stdev( data, {'dim': 1, 'dtype': 'float32'} );
+		s = stdev( data, {
+			'dim': 1
+		});
 
-		assert.strictEqual( results.data.length, expected.data.length );
-		assert.deepEqual( results.data, expected.data );
+		assert.deepEqual( s.data, expected.data );
 	});
 
 	it( 'should compute the standard deviation for a vector (matrix with one column or row)', function test() {
