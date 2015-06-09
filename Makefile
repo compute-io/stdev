@@ -38,7 +38,7 @@ ISTANBUL_HTML_REPORT_PATH ?= $(ISTANBUL_OUT)/lcov-report/index.html
 # JSHINT #
 
 JSHINT ?= ./node_modules/.bin/jshint
-JSHINT_REPORTER ?= ./node_modules/jshint-stylish/stylish.js
+JSHINT_REPORTER ?= ./node_modules/jshint-stylish
 
 
 
