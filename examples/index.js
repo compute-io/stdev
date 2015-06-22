@@ -41,7 +41,7 @@ for ( i = 0; i < data.length; i++ ) {
 	data[ i ] = Math.round( Math.random() * 10 + 1 );
 }
 s = stdev( data );
-
+console.log( 'Typed arrays: %d\n', s );
 
 // ----
 // Matrices (along rows)...
